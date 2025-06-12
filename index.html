@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TurboBuilder</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -40,19 +38,16 @@
 <body class="bg-gray-100 text-gray-800 antialiased leading-normal">
     <div class="min-h-screen flex items-center justify-center p-4">
         <div class="bg-white shadow-xl rounded-lg p-8 max-w-4xl w-full">
-            <!-- Main Title -->
             <h1 class="text-4xl font-bold text-center text-blue-700 mb-8 rounded-md p-4">
                 TurboBuilder
             </h1>
 
-            <!-- Submitting Bundles Section -->
             <div class="mb-10">
                 <p class="text-lg text-gray-700 leading-relaxed">
                     Send MEV bundles to our relay endpoint <code class="text-blue-600">https://rpc.turbobuilder.xyz</code>.
                 </p>
             </div>
 
-            <!-- eth_sendBundle Section -->
             <div class="mb-10">
                 <h3 id="eth_sendbundle" class="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
                     <span class="text-blue-600">eth_sendBundle</span>
@@ -67,12 +62,12 @@
   <span class="hljs-string">"method"</span>: <span class="hljs-string">"eth_sendBundle"</span>,
   <span class="hljs-string">"params"</span>: [
     {
-      txs,               <span class="hljs-comment">// Array&lt;String&gt;, A list of signed transactions to execute in an atomic bundle</span>
-      blockNumber,       <span class="hljs-comment">// String, a hex encoded block number for which this bundle is valid on</span>
+      txs,                <span class="hljs-comment">// Array&lt;String&gt;, A list of signed transactions to execute in an atomic bundle</span>
+      blockNumber,        <span class="hljs-comment">// String, a hex encoded block number for which this bundle is valid on</span>
       revertingTxHashes, <span class="hljs-comment">// (Optional) Array&lt;String&gt;, A list of tx hashes that are allowed to revert</span>
-      replacementUuid,   <span class="hljs-comment">// (Optional) String, UUID that can be used to replace this bundle</span>
-      refundPercent,     <span class="hljs-comment">// (Optional) Number, the percentage (from 0 to 99) of bundle tip that should be passed back to the refundRecipient</span>
-      refundRecipient,   <span class="hljs-comment">// (Optional) Address, account that will receive the refund from this bundle, defaults to the sender of the first transaction</span>
+      replacementUuid,    <span class="hljs-comment">// (Optional) String, UUID that can be used to replace this bundle</span>
+      refundPercent,      <span class="hljs-comment">// (Optional) Number, the percentage (from 0 to 99) of bundle tip that should be passed back to the refundRecipient</span>
+      refundRecipient,    <span class="hljs-comment">// (Optional) Address, account that will receive the refund from this bundle, defaults to the sender of the first transaction</span>
     }
   ]
 }</code></pre>
@@ -82,7 +77,6 @@
                 </p>
             </div>
 
-            <!-- Example Request Section -->
             <div class="mb-10">
                 <h2 id="request-example" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
                     Example Request
@@ -100,7 +94,6 @@
 }' https://rpc.turbobuilder.xyz</code></pre>
             </div>
 
-            <!-- Example Response Section -->
             <div class="mb-10">
                 <h2 id="response-example" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
                     Example Response
@@ -114,7 +107,6 @@
 }</code></pre>
             </div>
 
-            <!-- FAQ Section -->
             <div class="mb-10">
                 <h2 id="faq" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
                     FAQ
@@ -122,6 +114,11 @@
                 <h3 id="address" class="text-xl font-semibold text-gray-900 mb-2">Address</h3>
                 <p class="text-lg text-gray-700 leading-relaxed">
                     Our on-chain fee recipient is <a href="https://etherscan.io/address/0x5638cbdc72bd8554055883d309cfc70357190cf3" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer"><code class="text-blue-600">turbobuilder.eth</code></a>.
+                </p>
+
+                <h3 id="bundle-merging-logic" class="text-xl font-semibold text-gray-900 mb-2 mt-6">Bundle Merging Logic</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    We operate a searcher builder in mainnet, and this RPC is for our neutral builder. For the neutral builder, we ensure that all external bundles are processed at the top of the block. Our internal searcher only captures any leftover MEV for these blocks.
                 </p>
             </div>
         </div>
