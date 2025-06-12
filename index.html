@@ -3,15 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Awesome Single Page</title>
+    <title>TurboBuilder</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-        h1 { color: #333; }
-        p { color: #666; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom styling for pre blocks to ensure proper overflow and background */
+        pre {
+            background-color: #1a202c; /* dark gray */
+            color: #e2e8f0; /* light gray text */
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            white-space: pre; /* Ensures content does not wrap and allows horizontal scrolling */
+            /* word-break: break-all; - Removed as per request to avoid wrapping */
+        }
+        code {
+            font-family: 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            background-color: #edf2f7; /* light gray for inline code */
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+        pre code {
+            background-color: transparent; /* No background for code inside pre */
+            padding: 0;
+            border-radius: 0;
+            font-size: 1em;
+        }
     </style>
 </head>
-<body>
-    <h1>Hello from TurboBuilder!</h1>
-    <p>Instructions coming soon!</p>
+<body class="bg-gray-100 text-gray-800 antialiased leading-normal">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white shadow-xl rounded-lg p-8 max-w-4xl w-full">
+            <!-- Main Title -->
+            <h1 class="text-4xl font-bold text-center text-blue-700 mb-8 rounded-md p-4">
+                TurboBuilder
+            </h1>
+
+            <!-- Submitting Bundles Section -->
+            <div class="mb-10">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Send MEV bundles to our relay endpoint <code class="text-blue-600">https://rpc.turbobuilder.xyz</code>.
+                </p>
+            </div>
+
+            <!-- eth_sendBundle Section -->
+            <div class="mb-10">
+                <h3 id="eth_sendbundle" class="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
+                    <span class="text-blue-600">eth_sendBundle</span>
+                </h3>
+                <p class="text-lg text-gray-700 leading-relaxed mb-4">
+                    The <code class="text-blue-600">eth_sendBundle</code> RPC method is used to submit your bundles to our builder.
+                    The payload format is as follows:
+                </p>
+                <pre><code class="language-json">{
+  <span class="hljs-string">"jsonrpc"</span>: <span class="hljs-string">"2.0"</span>,
+  <span class="hljs-string">"id"</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-string">"method"</span>: <span class="hljs-string">"eth_sendBundle"</span>,
+  <span class="hljs-string">"params"</span>: [
+    {
+      txs,               <span class="hljs-comment">// Array&lt;String&gt;, A list of signed transactions to execute in an atomic bundle</span>
+      blockNumber,       <span class="hljs-comment">// String, a hex encoded block number for which this bundle is valid on</span>
+      revertingTxHashes, <span class="hljs-comment">// (Optional) Array&lt;String&gt;, A list of tx hashes that are allowed to revert</span>
+      replacementUuid,   <span class="hljs-comment">// (Optional) String, UUID that can be used to replace this bundle</span>
+      refundPercent,     <span class="hljs-comment">// (Optional) Number, the percentage (from 0 to 99) of bundle tip that should be passed back to the refundRecipient</span>
+      refundRecipient,   <span class="hljs-comment">// (Optional) Address, account that will receive the refund from this bundle, defaults to the sender of the first transaction</span>
+    }
+  ]
+}</code></pre>
+                <p class="text-lg text-gray-700 leading-relaxed mt-4">
+                    Please note that we do not support <code class="text-blue-600">minTimestamp</code> or <code class="text-blue-600">maxTimestamp</code>;
+                    if you include these fields in your bundle, they will be ignored.
+                </p>
+            </div>
+
+            <!-- Example Request Section -->
+            <div class="mb-10">
+                <h2 id="request-example" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
+                    Example Request
+                </h2>
+                <pre><code class="language-bash">curl -X POST -H 'Content-Type: application/json' --data '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "eth_sendBundle",
+    "params": [
+        {
+          "txs" : ["0x123abc...", "0x456def..."],
+          "blockNumber" : "0xf1d277"
+        }
+    ]
+}' https://rpc.turbobuilder.xyz</code></pre>
+            </div>
+
+            <!-- Example Response Section -->
+            <div class="mb-10">
+                <h2 id="response-example" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
+                    Example Response
+                </h2>
+                <pre><code class="language-json">{
+  <span class="hljs-attr">"jsonrpc"</span>:<span class="hljs-string">"2.0"</span>,
+  <span class="hljs-attr">"id"</span>:<span class="hljs-number">1</span>,
+  <span class="hljs-attr">"result"</span>:{
+    <span class="hljs-attr">"bundleHash"</span>:<span class="hljs-string">"0x2228f5d8954ce31dc1601a8ba264dbd401bf1428388ce88238932815c5d6f23f"</span>
+  }
+}</code></pre>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="mb-10">
+                <h2 id="faq" class="text-2xl font-semibold text-gray-900 mb-4 pb-2 border-b-2 border-blue-500">
+                    FAQ
+                </h2>
+                <h3 id="address" class="text-xl font-semibold text-gray-900 mb-2">Address</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Our on-chain fee recipient is <a href="https://etherscan.io/address/0x5638cbdc72bd8554055883d309cfc70357190cf3" class="text-blue-600 hover:underline font-medium" target="_blank" rel="noopener noreferrer"><code class="text-blue-600">turbobuilder.eth</code></a>.
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
